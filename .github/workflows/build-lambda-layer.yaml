@@ -47,7 +47,7 @@ jobs:
           pip install -r requirements/layer.txt -t python
           pip install . -t  python
 
-          zip --quiet -r ${{ env.layer_name }} python
+          zip --quiet -r ${{ env.layer_name }}.zip python
 
-          aws s3 cp ${{ env.layer_name }} ${{ env.bucket_uri }}
-          aws lambda publish-layer-version --layer-name ${{ env.layer_name }}  --content S3Bucket=${{ env.bucket_name }},S3Key=${{ env.layer_name }} --compatible-runtimes python${{ inputs.python_version }}
+          aws s3 cp ${{ env.layer_name }}.zip ${{ env.bucket_uri }}
+          aws lambda publish-layer-version --layer-name ${{ env.layer_name }}  --content S3Bucket=${{ env.bucket_name }},S3Key=${{ env.layer_name }}.zip --compatible-runtimes python${{ inputs.python_version }}
