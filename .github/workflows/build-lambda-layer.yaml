@@ -45,7 +45,6 @@ jobs:
           mkdir python
 
           pip install -r requirements/layer.txt -t python
-          pip install . -t  python
 
           zip --quiet -r ${{ env.layer_name }}.zip python
 
