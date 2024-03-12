@@ -1,0 +1,53 @@
+import pickle
+import nltk
+from nltk.tokenize import TreebankWordTokenizer
+
+FILE_PATH = "/Users/jackperry/Documents/GitHub/Toxic comment challenge/model.plk"
+VEC_FILE_PATH = "/Users/jackperry/Documents/GitHub/Toxic comment challenge/vectorizer.pkl"
+
+# Define the tokenizer
+def nltk_tokenizer(text):
+    tokenizer = TreebankWordTokenizer()
+    return tokenizer.tokenize(text)
+
+# Function to define and load the tokenizer, model, and vectorizer
+def load_resources(file_path, vec_file_path):
+    nltk.download('punkt')
+    nltk.download('stopwords')
+
+    # Load the serialized model and vectorizer
+    with open(file_path, 'rb') as file:
+        model = pickle.load(file)
+    with open(vec_file_path, 'rb') as file:
+        vectorizer = pickle.load(file)
+
+    return model, vectorizer
+
+# Function to preprocess text, make predictions and print results
+def predict_threatening_text(text):
+
+    # Load model, vectorizer, and tokenizer
+    loaded_model, loaded_vectorizer = load_resources(
+        file_path= FILE_PATH,
+        vec_file_path = VEC_FILE_PATH
+    )
+
+    #transform the text using the loaded vectorizer.
+    preprocessed_text = loaded_vectorizer.transform([text])
+    # print('preprocessed = ', preprocessed_text)
+
+    #make the prediction
+    prediction = loaded_model.predict(preprocessed_text)
+    # print(prediction)
+    
+    if prediction == 1:
+        response = '\nYOUR TEXT SEEMS THREATENING!\n'
+    else:
+        response = '\nYOUR TEXT SEEMS NON-THREATENING!\n'
+    
+    return response
+
+# Example Usage
+text_to_process = "i know where you live, and i will kill you"
+
+print(predict_threatening_text(text_to_process))
