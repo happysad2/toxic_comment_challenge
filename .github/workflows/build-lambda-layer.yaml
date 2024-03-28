@@ -15,8 +15,8 @@ on:
 
 env:
   layer_name: ToxicCommentLayer
-  bucket_name: toxic-comment-challenge-test
-  bucket_uri: s3://toxic-comment-challenge-test
+  bucket_name: jack-bucket-ml-code
+  bucket_uri: s3://jack-bucket-ml-code
 
 permissions:
   id-token: write
