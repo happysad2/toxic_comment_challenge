@@ -8,6 +8,10 @@ on:
         required: true
         type: number
         default: 3.10
+      layer_file:
+        description: 'Layer File'
+        required: true
+        type: string
 
 env:
   layer_name: ToxicCommentLayer
@@ -44,9 +48,9 @@ jobs:
         run: |
           mkdir python
 
-          pip install -r requirements/layer.txt -t python
+          pip install -r requirements/layer_${{ inputs.layer_file }}.txt -t python
 
-          zip --quiet -r ${{ env.layer_name }}.zip python
+          zip --quiet -r ${{ env.layer_name }}_${{ inputs.layer_file }}.zip python
 
-          aws s3 cp ${{ env.layer_name }}.zip ${{ env.bucket_uri }}
-          aws lambda publish-layer-version --layer-name ${{ env.layer_name }}  --content S3Bucket=${{ env.bucket_name }},S3Key=${{ env.layer_name }}.zip --compatible-runtimes python${{ inputs.python_version }}
+          aws s3 cp ${{ env.layer_name }}_${{ inputs.layer_file }}.zip ${{ env.bucket_uri }}
+          aws lambda publish-layer-version --layer-name ${{ env.layer_name }}_${{ inputs.layer_file }}  --content S3Bucket=${{ env.bucket_name }},S3Key=${{ env.layer_name }}_${{ inputs.layer_file }}.zip --compatible-runtimes python${{ inputs.python_version }}
